@@ -6,7 +6,8 @@ from keras.callbacks import ModelCheckpoint
 
 import os
 import sys
-sys.path.insert(0, '..')
+module_dir = os.path.join(os.path.dirname(__file__), '../')
+sys.path.insert(0, module_dir)
 from nalu import NALU
 from experiments.data_utils import generate_static_dataset
 

@@ -5,14 +5,13 @@ from keras.callbacks import ModelCheckpoint
 
 import os
 import sys
-sys.path.insert(0, '..')
+sys.path.insert(0, '/Users/minawoien/repos/master/master-thesis')
 from nalu import NALU
 from experiments.data_utils import generate_static_dataset
 
 
 if not os.path.exists('weights'):
     os.makedirs('weights')
-
 
 # hyper parameters
 units = 2
