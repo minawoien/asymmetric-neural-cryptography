@@ -3,10 +3,12 @@ import numpy as np
 # Make index selection deterministic as well
 np.random.seed(0)
 
+# Matrix containing random shuffled numbers between 0 and 99
+# Used to select parts of the input data 
 static_index = np.arange(0, 100, dtype=np.int64)
 np.random.shuffle(static_index)
 
-
+# Generates a static dataset based on an operation function 
 def generate_static_dataset(op_fn, num_samples=1000, mode='interpolation',
                             seed=0):
     """
