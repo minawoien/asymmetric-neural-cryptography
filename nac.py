@@ -1,11 +1,11 @@
-from keras.engine import Layer
-from keras.engine import InputSpec
+from tensorflow.keras.layers import Layer
+from tensorflow.keras.layers import InputSpec
 from keras import initializers
 from keras import regularizers
 from keras import constraints
-from keras import backend as K
+from tensorflow.keras import backend as K
 
-from keras.utils.generic_utils import get_custom_objects
+from tensorflow.keras.utils import get_custom_objects
 
 
 class NAC(Layer):

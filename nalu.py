@@ -1,13 +1,13 @@
-from keras.engine import Layer
-from keras.engine import InputSpec
+from  tensorflow.keras.layers import Layer
+from  tensorflow.keras.layers import InputSpec
 from keras import initializers
 from keras import regularizers
 from keras import constraints
-from keras import backend as K
+from tensorflow.keras import backend as K
 
-from keras.utils.generic_utils import get_custom_objects
+from tensorflow.keras.utils import get_custom_objects
 
-
+# Build a custom Keras layer 
 class NALU(Layer):
     def __init__(self, units,
                  use_gating=True,
@@ -61,6 +61,9 @@ class NALU(Layer):
 
         self.supports_masking = True
 
+    # Method to create the weights of the layer.
+    # Defines weights W_hat, M_hat, and optionally G (if gating is used). 
+    # The W_hat and M_hat weights are used for the arithmetic operations, while G is for gating between addition and multiplication.
     def build(self, input_shape):
         assert len(input_shape) >= 2
         input_dim = input_shape[-1]
@@ -89,6 +92,9 @@ class NALU(Layer):
         self.input_spec = InputSpec(min_ndim=2, axes={-1: input_dim})
         self.built = True
 
+    # Method for computation
+    # m for multiplication (and division) and a for addition (and subtraction)
+    # If gating is used, it combines these transformations based on the gate's output.
     def call(self, inputs, **kwargs):
         W = K.tanh(self.W_hat) * K.sigmoid(self.M_hat)
         m = K.exp(K.dot(K.log(K.abs(inputs) + self.epsilon), W))
@@ -102,6 +108,7 @@ class NALU(Layer):
 
         return outputs
 
+    # Method for computing the output shape of the layer.
     def compute_output_shape(self, input_shape):
         assert input_shape and len(input_shape) >= 2
         assert input_shape[-1]
@@ -109,6 +116,7 @@ class NALU(Layer):
         output_shape[-1] = self.units
         return tuple(output_shape)
 
+    # This method supports saving and loading of the model by returning the layer's configuration as a Python dictionary.
     def get_config(self):
         config = {
             'units': self.units,
@@ -128,5 +136,5 @@ class NALU(Layer):
         base_config = super(NALU, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
 
-
+# Adding the NALU class to the set of available custom objects in Keras, allowing it to be used in model definitions by name.
 get_custom_objects().update({'NALU': NALU})
